@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" lang="fr" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Projet de Session</title>
+    <link rel="stylesheet" href="css/bootstrap-4.4.1-dist/css/bootstrap.css">
+</head>
+<body>
+<div>
+      {% include "header.html" %}
+</div>
+<div  style="text-align:center">
+
+<br>
+  <form action="/rechercheNom" method="get">
+    <div class="form-group">
+        <label for="recherche_nom">Recherchez par Nom:</label>
+        <input class="form-control" type="text" name="recherche_nom" id="recherche_nom" placeholder="Search" aria-label="Search">
+    </div>
+  </form>
+    <form action="/rechercheProprietaire" method="get">
+    <div class="form-group">
+        <label for="recherche_proprietaire">Recherchez par Proprietaire:</label>
+        <input class="form-control" type="text" name="recherche_proprietaire" id="recherche_proprietaire" placeholder="Search" aria-label="Search">
+    </div>
+  </form>
+    <form action="/rechercheRue" method="get">
+    <div class="form-group">
+        <label for="recherche_rue">Recherchez par Rue:</label>
+        <input class="form-control" type="text" name="recherche_rue" id="recherche_rue" placeholder="Search" aria-label="Search">
+    </div>
+  </form>
+</div>
+</body>
+</html>

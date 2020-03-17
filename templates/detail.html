@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CMS - Revue indépendante </title>
+    <link rel="stylesheet" href="css/bootstrap-4.4.1-dist/css/bootstrap.min.css">
+  </head>
+  <body>
+  <div>
+    {% include "header.html" %}
+
+  </div>
+
+<br>
+
+    <div style="text-align:center">
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Nom</th>
+                <th scope="col">Proprietaire</th>
+                <th scope="col">adresse</th>
+                  <th scope="col">description</th>
+                  <th scope="col">date infraction</th>
+                <th scope="col">date Jugement</th>
+                <th scope="col">montant</th>
+
+              </tr>
+            </thead>
+            <tbody>
+                {% for contrevenant in contrevenants %}
+                    {% for contravention in contrevenant.contraventions %}
+                        <tr>
+                        <td>  {{ contrevenant.etablissement}} </a></td>
+                        <td>{{contrevenant.proprietaire}}</td>
+                        <td>{{contrevenant.adresse}}</td>
+                        <td> {{contravention.description}}</td>
+                            <td>{{contravention.date_infraction}}</td>
+                                                        <td>{{contravention.date_jugement}}</td>
+                                                        <td>{{contravention.montant}}</td>
+                    {% endfor %}
+              </tr>
+                {% else %}
+                <tr><td> Malheureusement, il n'y a aucun article qui correspond. </td></tr>
+                {% endfor %}
+           </tbody>
+          </table>
+ </div>
+
+
+  </body>
+</html>

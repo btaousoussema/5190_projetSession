@@ -22,13 +22,24 @@ for contevenant in contrevenants:
     contrev = Contrevenant(contevenant[0].text, contevenant[1].text, contevenant[2].text,  contevenant[3].text,
                            contevenant[4].text, contevenant[5].text, contevenant[6].text, contevenant[7].text,
                            contevenant[8].text)
+    database = Database()
+    database.get_connection()
+    try:
+        database.insert_contrevenant(contrev)
+        unefois = False
+    except:
+        print("Ce contrevenant existe déjà.")
+    database.insert_contravention(contrev)
    # contrev.print()
-    if unefois:
-        database = Database()
-        database.get_connection()
-        try:
-            database.insert_contrevenant(contrev)
-            unefois = False
-        except:
-            print("Ce contrevenant existe déjà.")
-            database.insert_contravention(contrev)
+   #  if unefois:
+   #      database = Database()
+   #      database.get_connection()
+   #      try:
+   #          database.insert_contrevenant(contrev)
+   #          unefois = False
+   #      except:
+   #          print("Ce contrevenant existe déjà.")
+   #  try:
+   #      database.insert_contravention(contrev)
+   #  except:
+   #      print("Cette contravention est déjà dans la base de donnée.")

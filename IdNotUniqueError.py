@@ -1,4 +1,4 @@
 
 class IdNotUniqueError(Exception):
-    """Lancé lorsque le ID du propriétaire d'un restaurant est déjà dans la base de donnée."""
+    """Lancé lorsque le ID est déja présent dans la Base de données. """
     pass

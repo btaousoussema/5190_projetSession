@@ -1,6 +1,8 @@
 import sqlite3
 
 import IdNotUniqueError
+from contravention_db import ContraventionDb
+from contrevenant_db import ContrevenantDb
 
 
 class Database:
@@ -37,9 +39,60 @@ class Database:
         connection = self.get_connection()
         cursor = connection.cursor()
         proprietaire_id = cursor.execute("Select id from contrevenant where proprietaire = ?",
-                                         (contrevenant.proprietaire,)).fetchall()
+                                        (contrevenant.proprietaire,)).fetchone()
         cursor.execute(("insert into contravention(proprietaire_id, description, date_infraction, date_jugement, "
-                        "montant) values(?, ?, ?, ?, ?)"), (proprietaire_id[0], contrevenant.description,
+                       "montant) values(?, ?, ?, ?, ?)"), (proprietaire_id[0], contrevenant.description,
                                                             contrevenant.date_infraction, contrevenant.date_jugement,
                                                             contrevenant.montant))
         connection.commit()
+
+    def recherche_nom(self,recherche):
+        connection = self.get_connection()
+        cursor = connection.cursor()
+        query = cursor.execute("Select * from contrevenant where etablissement like ?", ('%' + recherche + '%',)).fetchall()
+        Contrevenants = []
+        for elem in query:
+            contrevenant = ContrevenantDb(elem[0], elem[1], elem[2], elem[3], elem[4],
+                                        elem[5])
+            contraventions = self.get_all_contraventions(contrevenant.id)
+            contrevenant.ajouter_contraventions(contraventions)
+            Contrevenants.append(contrevenant)
+        return Contrevenants
+
+    def recherche_proprietaire(self, recherche):
+        connection = self.get_connection()
+        cursor = connection.cursor()
+        query = cursor.execute("Select * from contrevenant where proprietaire like ?",
+                               ('%' + recherche + '%',)).fetchall()
+        Contrevenants = []
+        for elem in query:
+            contrevenant = ContrevenantDb(elem[0], elem[1], elem[2], elem[3], elem[4],
+                                          elem[5])
+            contraventions = self.get_all_contraventions(contrevenant.id)
+            contrevenant.ajouter_contraventions(contraventions)
+            Contrevenants.append(contrevenant)
+        return Contrevenants
+
+    def recherche_adresse(self, recherche):
+        connection = self.get_connection()
+        cursor = connection.cursor()
+        query = cursor.execute("Select * from contrevenant where adresse like ?",
+                               ('%' + recherche + '%', )).fetchall()
+        Contrevenants = []
+        for elem in query:
+            contrevenant = ContrevenantDb(elem[0], elem[1], elem[2], elem[3], elem[4],
+                                          elem[5])
+            contraventions = self.get_all_contraventions(contrevenant.id)
+            contrevenant.ajouter_contraventions(contraventions)
+            Contrevenants.append(contrevenant)
+        return Contrevenants
+
+    def get_all_contraventions(self, id):
+        connection = self.get_connection()
+        cursor = connection.cursor()
+        query = cursor.execute("Select * from contravention where proprietaire_id = ?", (id,)).fetchall()
+        contraventions = []
+        for elem in query:
+            contravention = ContraventionDb(elem[0], elem[1], elem[2], elem[3], elem[4], elem[5])
+            contraventions.append(contravention)
+        return contraventions
