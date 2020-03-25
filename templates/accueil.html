@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Projet de Session</title>
+    <script src="js/script.js"></script>
     <link rel="stylesheet" href="css/bootstrap-4.4.1-dist/css/bootstrap.css">
 </head>
 <body>
@@ -30,6 +31,33 @@
         <input class="form-control" type="text" name="recherche_rue" id="recherche_rue" placeholder="Search" aria-label="Search">
     </div>
   </form>
+  <form>
+    <div class="form-group">
+        Rechercher par dates d'infraction:
+        <br>
+        <label for="du">Du: </label>
+        <input class="form-control" type="text" name="du" id="du" placeholder="Search" aria-label="Search">
+        <label for="au">Au : </label>
+        <input class="form-control" type="text" name="au" id="au" placeholder="Search" aria-label="Search">
+  </div>
+  <button type="button" class="btn btn-primary" onclick="chercherContrevenant()">Primary</button>
+  </form>
+  <br>
+          <div>
+            <div>
+
+            
+              <select class="custom-select" id="choixContrevenant" onchange="getContraventions();">
+                  <option selected value="0">Choisissez un restaurant et les informations des contraventnions vont s'afficher. </option>
+                    {% for contrevenant in contrevenants %}            
+                      <option value="{{contrevenant.id}}">{{contrevenant.etablissement}} </option>
+                    {%endfor %}
+              </select>
+            </div>
+            <div id="infractions">
+              
+            </div>
+          </div>
 </div>
 </body>
 </html>

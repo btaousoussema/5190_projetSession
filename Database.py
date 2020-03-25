@@ -55,7 +55,7 @@ class Database:
             contrevenant = ContrevenantDb(elem[0], elem[1], elem[2], elem[3], elem[4],
                                         elem[5])
             contraventions = self.get_all_contraventions(contrevenant.id)
-            contrevenant.ajouter_contraventions(contraventions)
+            contrevenant.set_contraventions(contraventions)
             Contrevenants.append(contrevenant)
         return Contrevenants
 
@@ -69,7 +69,7 @@ class Database:
             contrevenant = ContrevenantDb(elem[0], elem[1], elem[2], elem[3], elem[4],
                                           elem[5])
             contraventions = self.get_all_contraventions(contrevenant.id)
-            contrevenant.ajouter_contraventions(contraventions)
+            contrevenant.set_contraventions(contraventions)
             Contrevenants.append(contrevenant)
         return Contrevenants
 
@@ -83,7 +83,7 @@ class Database:
             contrevenant = ContrevenantDb(elem[0], elem[1], elem[2], elem[3], elem[4],
                                           elem[5])
             contraventions = self.get_all_contraventions(contrevenant.id)
-            contrevenant.ajouter_contraventions(contraventions)
+            contrevenant.set_contraventions(contraventions)
             Contrevenants.append(contrevenant)
         return Contrevenants
 
@@ -96,3 +96,38 @@ class Database:
             contravention = ContraventionDb(elem[0], elem[1], elem[2], elem[3], elem[4], elem[5])
             contraventions.append(contravention)
         return contraventions
+
+    def contrevenant_entre_deux_dates(self, du, au):
+        connection = self.get_connection()
+        cursor = connection.cursor()
+        query = cursor.execute("Select * from contravention where date_infraction >= ? and date_infraction <= ?", (du, au))
+        contrevenants = []
+        for elem in query:
+            contravention_db = ContraventionDb(elem[0], elem[1], elem[2], elem[3], elem[4], elem[5])
+            contrevenant = self.get_contrevenant(contravention_db.proprietaire)
+            if contrevenant not in contrevenants:
+                contrevenant.ajouter_contravention(contravention_db)
+                contrevenants.append(contrevenant)
+            else:
+                for contr in contrevenants:
+                    if contr == contrevenant:
+                        contr.ajouter_contravention(contravention_db)
+        return contrevenants
+
+    def get_contrevenant(self, id):
+        connection = self.get_connection()
+        cursor = connection.cursor()
+        query = cursor.execute("Select * from contrevenant where id = ?", (id,)).fetchone()
+        contrevenant = ContrevenantDb(query[0], query[1], query[2], query[3], query[4], query[5])
+        return contrevenant
+
+    def get_all_contrevenant(self):
+        connection = self.get_connection()
+        cursor = connection.cursor()
+        query = cursor.execute("select * from contrevenant").fetchall()
+        contrevenants = []
+        for element in query:
+            contrevenant = ContrevenantDb(element[0], element[1], element[2],
+                                          element[3], element[4], element[5])
+            contrevenants.append(contrevenant)
+        return contrevenants

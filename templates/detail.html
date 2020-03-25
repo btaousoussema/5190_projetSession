@@ -31,16 +31,17 @@
             <tbody>
                 {% for contrevenant in contrevenants %}
                     {% for contravention in contrevenant.contraventions %}
+                {{contravention}}
                         <tr>
                         <td>  {{ contrevenant.etablissement}} </a></td>
                         <td>{{contrevenant.proprietaire}}</td>
                         <td>{{contrevenant.adresse}}</td>
                         <td> {{contravention.description}}</td>
-                            <td>{{contravention.date_infraction}}</td>
-                                                        <td>{{contravention.date_jugement}}</td>
-                                                        <td>{{contravention.montant}}</td>
+                        <td>{{contravention.date_infraction}}</td>
+                        <td>{{contravention.date_jugement}}</td>
+                        <td>{{contravention.montant}}</td>
+                        </tr>
                     {% endfor %}
-              </tr>
                 {% else %}
                 <tr><td> Malheureusement, il n'y a aucun article qui correspond. </td></tr>
                 {% endfor %}

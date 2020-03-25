@@ -3,7 +3,7 @@ from flask import request
 from flask import render_template
 from flask import g
 from Database import Database
-
+import json
 app = Flask(__name__, static_url_path="", static_folder="static")
 
 
@@ -16,7 +16,8 @@ def get_db():
 
 @app.route('/')
 def page_accueil():
-    return render_template('accueil.html')
+    contrevenants = get_db().get_all_contrevenant()
+    return render_template('accueil.html', contrevenants=contrevenants)
 
 @app.route('/rechercheNom')
 def recherche_nom():
@@ -47,3 +48,26 @@ def recherche_rue():
     #print("-----------------------------", contrevenants_db[0])
     #print("\n Les contravenntionsssss \n" , contrevenants_db[0].contraventions)
     return render_template('detail.html', contrevenants=contrevenants_db)
+
+@app.route('/rechercheDate')
+def rechercher_selon_date():
+    du = request.args.get('du')
+    au = request.args.get('au')
+    contrevenants_db = get_db().contrevenant_entre_deux_dates(du, au)
+    for i in contrevenants_db:
+        print(len(i.contraventions))
+    j = json.dumps([ob.to_dict() for ob in contrevenants_db])
+    print(j)
+    # for v in j:
+    #     print(len(v["contraventions"]))
+    #print("----------------------",contrevenants_db.contraventions)
+    #return render_template('detail.html', contrevenants=contrevenants_db)
+    #datetime.strptime('02 novembre 2017', '%d %B %Y')
+    return j
+
+@app.route("/getContraventions")
+def get_contraventions():
+    id = request.args.get('id')
+    contraventions = get_db().get_all_contraventions(id)
+    j = json.dumps([ob.to_dict() for ob in contraventions])
+    return j
