@@ -17,6 +17,7 @@ def get_db():
 @app.route('/')
 def page_accueil():
     contrevenants = get_db().get_all_contrevenant()
+    print(len(contrevenants))
     return render_template('accueil.html', contrevenants=contrevenants)
 
 @app.route('/rechercheNom')
