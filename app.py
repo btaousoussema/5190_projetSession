@@ -14,15 +14,15 @@ def get_db():
     return g._database
 
 
-# @app.route('/')
-# def page_accueil():
-#     contrevenants = get_db().get_all_contrevenant()
-#     print(len(contrevenants))
-#     return render_template('accueil.html', contrevenants=contrevenants)
-
 @app.route('/')
 def page_accueil():
-    return render_template('accueil.html')
+    contrevenants = get_db().get_all_contrevenant()
+    print(len(contrevenants))
+    return render_template('accueil.html', contrevenants=contrevenants)
+
+# @app.route('/')
+# def page_accueil():
+#     return render_template('accueil.html')
 
 @app.route('/rechercheNom')
 def recherche_nom():
