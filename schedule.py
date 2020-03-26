@@ -14,8 +14,6 @@ sched = BackgroundScheduler()
 
 # Schedule job_function to be called every 1 second
 # FIXME: Do not forget to change end_date to actual date
-sched.add_job(get_data, 'cron', hour=13, minute=58, second=0)
+sched.add_job(get_data, 'cron', hour=0, minute=0, second=0)
 
 sched.start()
-print("C'est ocmmenceé.")
-time.sleep(99999)
