@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask
 from flask import request
 from flask import render_template
@@ -76,3 +78,8 @@ def get_contraventions():
     contraventions = get_db().get_all_contraventions(id)
     j = json.dumps([ob.to_dict() for ob in contraventions])
     return j
+
+
+if __name__== "__main__":
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
