@@ -36,9 +36,17 @@
         Rechercher par dates d'infraction:
         <br>
         <label for="du">Du: </label>
-        <input class="form-control" type="text" name="du" id="du" placeholder="Search" aria-label="Search">
+        <input class="form-control" type="text" name="du" id="du"  {% if du %} value="{{du}}" {% endif %} placeholder="Date de début en format AAAA-MM-JJ" aria-label="Search">
         <label for="au">Au : </label>
-        <input class="form-control" type="text" name="au" id="au" placeholder="Search" aria-label="Search">
+        <input class="form-control" type="text" name="au" id="au" {% if au %} value="{{au}}" {% endif %} placeholder="Date de fin en format AAAA-MM-JJ" aria-label="Search">
+        <div id="erreurDate" hidden="true" class="col-sm-3">
+          <small class="text-danger">
+            Les dates doivent avoir le format AAAA-MM-JJ. 
+          </small>      
+        </div>
+        <div id="valeur">
+
+        </div>
   </div>
   <button type="button" class="btn btn-primary" onclick="chercherContrevenant()">Primary</button>
   </form>
