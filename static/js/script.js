@@ -26,13 +26,18 @@ function chercherContrevenant(){
   }
 }
 
-function verifierDates(du, au){
+function verifierDates(date){
   var reg = new RegExp("^[0-9]{4}-[0-1][0-9]-[0-3][0-9]$");
-  if (reg.exec(du) == null || reg.exec(au) == null){
+  if (reg.exec(date) == null){
     return false;
   }
   return true;
 }
+
+function verifierDates(du, au){
+  return verifierDates(du) && verifierDates(au);
+}
+
 function process(data){
   if (Object.keys(data).length === 0){
     return html = "Il n'y a aucune contravention pour ces dates";
@@ -87,4 +92,31 @@ function htmlInfractions(data){
   }
   html += "</tbody></table>";
   return html;
+}
+
+function creerInfraction(){
+  var nom = document.getElementById("nom").value;
+  var adresse = document.getElementById("adresse").value;
+  var ville = document.getElementById("ville").value;
+  var date_visite = document.getElementById("date_visite").value;
+  var nom_plaignant = document.getElementById("nom_plaignant").value;
+  var description = document.getElementById("description").value;
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      if (xhr.status === 200) {
+        var data = JSON.parse(xhr.responseText);
+        console.log(xhr.responseText);
+        window.location.replace("/confirmation.html/"+data.id);
+      } else {
+        console.log('Erreur avec le serveur');
+      }
+    }
+  };
+  var url = "/inspection";
+  xhr.open('POST', url, true);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  console.log(JSON.stringify({nom:nom, adresse:adresse, ville:ville, date_visite: date_visite, nom_plaignant: nom_plaignant, description: description}));
+  xhr.send(JSON.stringify({nom:nom, adresse:adresse, ville:ville, date_visite:date_visite, nom_plaignant:nom_plaignant,description:description}));
+  //xhr.send()
 }

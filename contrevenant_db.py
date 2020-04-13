@@ -12,17 +12,21 @@ class ContrevenantDb(dict):
     def set_contraventions(self, contraventions):
         self.contraventions = contraventions
 
-    def ajouter_contravention(self, contravention):
-        self.contraventions.append(contravention)
+    def ajouter_contravention(self, contraventions):
+        if type(contraventions) == list:
+            for contravention in contraventions:
+                self.contraventions.append(contravention)
+        else:
+            self.contraventions.append(contraventions)
 
     def print(self):
         print(self.id, self.proprietaire, self.categorie, self.etablissement, self.adresse, self.ville)
 
     def to_dict(self):
         return  {"id": self.id, "proprietaire": self.proprietaire, "categorie":self.categorie,
-                 "etablissement":self.etablissement, "adresse":self.adresse, "ville":self.ville,
+                 "etablissement": self.etablissement, "adresse": self.adresse, "ville": self.ville,
                  "contraventions": json.dumps([ob.to_dict() for ob in self.contraventions]),
-                 "nombre_contraventions":len(self.contraventions)}
+                 "nombre_contraventions": len(self.contraventions)}
 
     def __eq__(self, other):
         return self.id == other.id

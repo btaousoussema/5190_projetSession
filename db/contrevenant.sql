@@ -16,3 +16,13 @@ create table contravention(
   montant varchar(10),
   foreign key(proprietaire_id) references contrevenant(id)
 );
+
+create table inspection(
+ id integer primary key autoincrement,
+ Etablissement varchar(50),
+ adresse varchar(40),
+ ville varchar(50),
+ date_visite text,
+ nom varchar(50),
+ description varchar(200)
+);

@@ -1,6 +1,8 @@
 import sqlite3
 
 import IdNotUniqueError
+from Infraction import Infraction
+from Inspection import Inspection
 from contravention_db import ContraventionDb
 from contrevenant_db import ContrevenantDb
 
@@ -129,5 +131,27 @@ class Database:
         for element in query:
             contrevenant = ContrevenantDb(element[0], element[1], element[2],
                                           element[3], element[4], element[5])
+            contrevenant.ajouter_contravention(self.get_all_contraventions(contrevenant.id))
             contrevenants.append(contrevenant)
         return contrevenants
+
+    def insert_inspection(self, inspection):
+        connection = self.get_connection()
+        cursor = connection.cursor()
+        cursor.execute("Insert into inspection( Etablissement, adresse, ville, date_visite, nom, description)  "
+                       "values(?, ?, ?, ?, ?, ?)", (inspection.nom, inspection.adresse, inspection.ville, inspection.date_visite,
+                                                 inspection.nom_plaignant, inspection.description))
+        connection.commit()
+        id = cursor.execute("SELECT last_insert_rowid()").fetchone()
+        print("-------------------------------",id[0])
+#        print(id[0])
+        return id[0]
+
+    def get_infraction(self, id):
+        connection = self.get_connection()
+        cursor = connection.cursor()
+        query = cursor.execute("Select * from inspection where id = ?", (id,)).fetchone()
+        inspection = None
+        if len(query) > 0:
+            inspection = Inspection(query[1], query[2], query[3], query[4], query[5], query[6])
+        return inspection
