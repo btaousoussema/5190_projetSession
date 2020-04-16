@@ -23,3 +23,15 @@ infraction_insert_schema = {
     },
     'additionalProperties': False
 }
+
+infraction_delete_schema = {
+    'type': 'object',
+    'required': ['id'],
+    'properties': {
+        'id': {
+            'type': 'number',
+            'minimum': 0
+        }
+    },
+    'additionalProperties': False
+}

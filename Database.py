@@ -111,9 +111,9 @@ class Database:
                 contrevenant.ajouter_contravention(contravention_db)
                 contrevenants.append(contrevenant)
             else:
-                for contr in contrevenants:
-                    if contr == contrevenant:
-                        contr.ajouter_contravention(contravention_db)
+                for contrevenant_actuel in contrevenants:
+                    if contrevenant_actuel == contrevenant:
+                        contrevenant_actuel.ajouter_contravention(contravention_db)
         return contrevenants
 
     def get_contrevenant(self, id):
@@ -143,15 +143,19 @@ class Database:
                                                  inspection.nom_plaignant, inspection.description))
         connection.commit()
         id = cursor.execute("SELECT last_insert_rowid()").fetchone()
-        print("-------------------------------",id[0])
-#        print(id[0])
         return id[0]
 
-    def get_infraction(self, id):
+    def get_inspection(self, id):
         connection = self.get_connection()
         cursor = connection.cursor()
         query = cursor.execute("Select * from inspection where id = ?", (id,)).fetchone()
         inspection = None
-        if len(query) > 0:
+        if query is not None:
             inspection = Inspection(query[1], query[2], query[3], query[4], query[5], query[6])
         return inspection
+
+    def delete_inspection(self, id):
+        connection = self.get_connection()
+        cursor = connection.cursor()
+        query = cursor.execute("Delete from inspection where id = ?", (id,))
+        connection.commit()

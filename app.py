@@ -1,4 +1,5 @@
 import os
+import re
 
 from flask import Flask
 from flask import request
@@ -12,6 +13,7 @@ import json
 
 from Inspection import Inspection
 from schemas import infraction_insert_schema
+from schemas import infraction_delete_schema
 
 app = Flask(__name__, static_url_path="", static_folder="static")
 schema = JsonSchema(app)
@@ -120,7 +122,7 @@ def formulaire_inspection():
     return render_template('inspection.html')
 
 
-@app.route('/inspection', methods=['POST'])
+@app.route('/api/inspection', methods=['POST'])
 @schema.validate(infraction_insert_schema)
 def ajouter_inspection():
     nom = request.json.get('nom')
@@ -129,19 +131,33 @@ def ajouter_inspection():
     date_visite = request.json.get('date_visite')
     nom_plaignant = request.json.get('nom_plaignant')
     description = request.json.get('description')
-    if verifier_date(date_visite):
+    message_erreur = verifier_champs(nom, adresse, ville, nom_plaignant, description)
+    print(message_erreur)
+    if verifier_date(date_visite) and message_erreur == "":
         inspection = Inspection(nom, adresse, ville, date_visite, nom_plaignant, description)
         id = get_db().insert_inspection(inspection)
         #return render_template("confirmation.html", inspection=inspection)
         print(id)
         return json.dumps({"id": int(id), "nom":inspection.nom, "adresse": inspection.adresse, "ville": inspection.ville, "date_visite": inspection.date_visite,
-                      "nom_plaignant":inspection.nom_plaignant, "description": inspection.description})
+                      "nom_plaignant":inspection.nom_plaignant, "description": inspection.description}),200
     else:
-        return {}
+        return json.dumps(message_erreur), 400
+
+
+@app.route('/api/inspection/<id>', methods=['DELETE'])
+def delete_inspection(id):
+    inspection = get_db().get_inspection(id)
+    if inspection is None:
+        print("None")
+        return "", 404
+    else:
+        get_db().delete_inspection(id)
+        return "", 200
+
 
 @app.route('/confirmation.html/<id>')
 def confirmer(id):
-    inspection = get_db().get_infraction(id)
+    inspection = get_db().get_inspection(id)
     return render_template('confirmation.html', inspection=inspection)
 
 def verifier_date(date):
@@ -168,6 +184,44 @@ def nombre_infractions(contrevenants):
                        "nombre_contraventions": len(contrevenant.contraventions)})
     json_data = json.dumps(donnes)
     return json_data
+
+def verifier_champs(nom, adresse, ville, nom_plaignant, description):
+    message = ""
+    erreur = valider_texte(nom, "nom de l'établissement")
+    if erreur is not None:
+        message += erreur
+    erreur = valider_non_vide(adresse, "adresse")
+    if erreur is not None:
+        message += erreur
+    erreur = valider_non_vide(ville, "ville")
+    if erreur is not None:
+        message += erreur
+    erreur = valider_texte(nom_plaignant, "nom")
+    if erreur is not None:
+        message += erreur
+    erreur = valider_non_vide(description, "description")
+    if erreur is not None:
+        message += erreur
+    return message
+
+
+def valider_texte(valeur, champ):
+    message = valider_non_vide(valeur, champ)
+    if message is None:
+        valeur_parsed = valeur.split("-")
+        for string in valeur_parsed:
+            if not re.match('^[a-zA-Z]+$', string):
+                message = "Il ne faut pas qu'il y ait des caractères " \
+                          "spéciaux pour les champs, sauf les '-'. "
+    return message
+
+
+def valider_non_vide(valeur, champ):
+    message = None
+    if valeur is None or valeur == "":
+        message = "Il ne faut pas que le champ " + champ + " soit vide. "
+    return message
+
 # if __name__== "__main__":
 #     port = int(os.environ.get('PORT', 5000))
 #     app.run(host='0.0.0.0', port=port)

@@ -26,7 +26,7 @@ function chercherContrevenant(){
   }
 }
 
-function verifierDates(date){
+function verifierUneDate(date){
   var reg = new RegExp("^[0-9]{4}-[0-1][0-9]-[0-3][0-9]$");
   if (reg.exec(date) == null){
     return false;
@@ -35,7 +35,7 @@ function verifierDates(date){
 }
 
 function verifierDates(du, au){
-  return verifierDates(du) && verifierDates(au);
+  return verifierUneDate(du) && verifierUneDate(au);
 }
 
 function process(data){
@@ -101,6 +101,7 @@ function creerInfraction(){
   var date_visite = document.getElementById("date_visite").value;
   var nom_plaignant = document.getElementById("nom_plaignant").value;
   var description = document.getElementById("description").value;
+  if(verifierUneDate(date_visite)){
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function() {
     if (xhr.readyState === XMLHttpRequest.DONE) {
@@ -109,14 +110,20 @@ function creerInfraction(){
         console.log(xhr.responseText);
         window.location.replace("/confirmation.html/"+data.id);
       } else {
+        document.getElementById("messageErreur").innerHTML = JSON.parse(xhr.responseText);
+        document.getElementById("messageErreur").hidden = false;
+        console.log(xhr.responseText);
         console.log('Erreur avec le serveur');
       }
     }
   };
-  var url = "/inspection";
+  var url = "/api/inspection";
   xhr.open('POST', url, true);
   xhr.setRequestHeader("Content-Type", "application/json");
   console.log(JSON.stringify({nom:nom, adresse:adresse, ville:ville, date_visite: date_visite, nom_plaignant: nom_plaignant, description: description}));
   xhr.send(JSON.stringify({nom:nom, adresse:adresse, ville:ville, date_visite:date_visite, nom_plaignant:nom_plaignant,description:description}));
+  } else{
+    document.getElementById("erreurDate").hidden=false;
+  }
   //xhr.send()
 }
