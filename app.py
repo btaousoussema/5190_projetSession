@@ -150,7 +150,7 @@ def confirmer(id):
     return render_template('confirmation.html', inspection=inspection)
 
 
-@app.route('/doc.html')
+@app.route('/doc')
 def documentation():
     return render_template('doc.html')
 
