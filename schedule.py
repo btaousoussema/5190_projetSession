@@ -7,8 +7,6 @@ from DataCollector import get_data
 logging.basicConfig()
 logging.getLogger('apscheduler').setLevel(logging.DEBUG)
 
-def job_function():
-    print("Hello World")
 
 sched = BackgroundScheduler()
 

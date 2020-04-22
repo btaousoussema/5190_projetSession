@@ -2,7 +2,8 @@ from datetime import datetime
 
 
 class Contrevenant:
-    def __init__(self, proprietaire, categorie, etablissement, adresse, ville, description, date_infraction,
+    def __init__(self, proprietaire, categorie, etablissement, adresse,
+                 ville, description, date_infraction,
                  date_jugement, montant):
         self.proprietaire = proprietaire
         self.categorie = categorie
@@ -17,13 +18,15 @@ class Contrevenant:
         self.montant = montant
 
     def print(self):
-        print(self.proprietaire, self.categorie, self.etablissement, self.adresse, self.adresse, self.ville,
-              self.description, self.date_infraction, self.date_jugement, self.montant)
+        print(self.proprietaire, self.categorie, self.etablissement,
+              self.adresse, self.adresse, self.ville, self.description,
+              self.date_infraction, self.date_jugement, self.montant)
 
     def transform_date(self, date):
         date_parsed = str(date).split(" ")
         mois = self.traduire_mois(date_parsed[1])
-        return datetime.strptime(date_parsed[0] + mois + date_parsed[2],'%d%B%Y').strftime('%Y-%m-%d')
+        return datetime.strptime(date_parsed[0] + mois + date_parsed[2],
+                                 '%d%B%Y').strftime('%Y-%m-%d')
 
     def traduire_mois(self, mois):
         if mois == "janvier":
