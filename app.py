@@ -76,7 +76,7 @@ def recherche_rue():
     return render_template('detail.html', contrevenants=contrevenants_db)
 
 
-@app.route('/rechercheDate')
+@app.route('/contrevenants')
 def rechercher_selon_date():
     du = request.args.get('du')
     au = request.args.get('au')
@@ -89,7 +89,7 @@ def rechercher_selon_date():
         print(data)
         return data
     else:
-        return {}
+        return json.dumps("Les dates ne respectent pas le format YYYY-MM-DD."), 400
         # message = "Les dates doivent être en format AAAA-MM-JJ. "
         # return render_template("accueil.html", message=message, du=du, au=au)
 
@@ -98,18 +98,22 @@ def rechercher_selon_date():
     # print("----------------------",contrevenants_db.contraventions)
     # return render_template('detail.html', contrevenants=contrevenants_db)
     # datetime.strptime('02 novembre 2017', '%d %B %Y')
-    return data
+    #return data PAS SUR SI DOIT ËTRE en comm?
 
 # Route A6
-@app.route("/getContraventions")
+@app.route("/api/contraventions")
 def get_contraventions():
     id = request.args.get('id')
-    contraventions = get_db().get_all_contraventions(id)
-    j = json.dumps([ob.to_dict() for ob in contraventions])
-    return j
+    contrevenant = get_db().get_contrevenant(id)
+    if contrevenant is None:
+        return json.dumps("L'id spécifié n'est pas valide."), 400
+    else:
+        contraventions = get_db().get_all_contraventions(id)
+        contraventions_json = json.dumps([ob.to_dict() for ob in contraventions])
+        return contraventions_json, 200
 
 #Route C1, il faut ordonner en décroissant tho!!
-@app.route('/getContrevenant')
+@app.route('/api/nombrecontraventions')
 def get_contrevenant():
     contrevenants = get_db().get_all_contrevenant()
     json_data = nombre_infractions(contrevenants)
@@ -176,12 +180,15 @@ def verifier_mois(mois):
 def verifier_jour(jour):
     return 1 <= int(jour) <= 31
 
+def takeSecond(elem):
+    return elem["nombre_contraventions"]
 
 def nombre_infractions(contrevenants):
     donnes = []
     for contrevenant in contrevenants:
-        donnes.append({"contrevenant": contrevenant.etablissement,
+            donnes.append({"contrevenant": contrevenant.etablissement,
                        "nombre_contraventions": len(contrevenant.contraventions)})
+    donnes.sort(key=takeSecond, reverse=True)
     json_data = json.dumps(donnes)
     return json_data
 

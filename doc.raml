@@ -1,0 +1,164 @@
+#%RAML 1.0
+title: Rest API de l'application restonews du projet de session. 
+mediaType: application/json
+types:
+ NewInspection:
+  properties:
+   nom:
+    type: string
+    required: true
+   adresse:
+    type: string
+    required: true
+   ville:
+    type: string
+    required: true
+   date_visite:
+    type: string
+    required: true
+   nom_plaignant: 
+    type: string
+    required: true
+   description:
+    type: string
+    required: true
+ ExistingInspection:
+  properties:
+   id:
+    type: number
+    required: true
+   nom:
+    type: string
+    required: true
+   adresse:
+    type: string
+    required: true
+   ville:
+    type: string
+    required: true
+   date_visite:
+    type: string
+    required: true
+   nom_plaignant: 
+    type: string
+    required: true
+   description:
+    type: string
+    required: true 
+ ExistingContravention:
+  properties:
+   id:
+    type: number
+    required: true
+   proprietaire:
+    type: string
+    required: true
+   description:
+    type: string
+    required: true
+   date_infraction:
+    type: string
+    required: true
+   date_jugement:
+    type: string
+    required: true
+   montant:
+    type: number
+    required: true 
+ ExistingContrevenant:
+  properties:
+   id:
+    type: number
+    required: true
+   proprietaire:
+    type: string
+    required: true
+   categorie:
+    type: string
+    required: true
+   etablissement:
+    type: string
+    required: true
+   adresse:
+    type: string
+    required: true
+   ville:
+    type: string
+    required: true
+   contraventions: 
+    type: ExistingContravention[]
+    required: true
+ NombreContraventions:
+  properties:
+   contrevenant:
+    type: string
+    required: true
+   nombre_contraventions:
+    type: number
+    required: true
+/api:
+ /inspection:
+  post:
+   description: Insérer dans la base de données une demande d'inspection. 	
+   body:
+    application/json:
+    type: NewInspection
+    example:
+     nom: Basha
+     adresse: 265 St Catherine St E, H2X 1L5
+     ville: Montréal
+     date_visite: 2019-04-17
+     nom_plaignant: Ouss
+     description: Il y avait des rats partout.
+   responses:
+    201:
+     description: La personne a bien été rajoutée.
+    400: 
+     description: Les données reçues ne sont pas valide. 
+  delete:
+   description: Supprimer une demande d'inspection, spécifié par un id. 
+   responses:
+    200:
+     description: La personne a bien été supprimé. 
+    400:
+     L'id spécifié n'existe pas.
+ /contrevenants:
+  get:
+   description: Renvoie les contrevenants qui ont eu des infractions entre deux dates spécifiées.
+   queryParameters:
+    du:
+     description: Date de début de la recherche en format YYYY-DD-MM. 
+     type: string
+     required: true
+     example: 2019-11-11
+    au:
+     description: Date de fin de la recherche en format YYYY-DD-MM. 
+     type: string
+     required: true
+     example: 2019-11-11
+   responses:
+    200:
+     body:
+      application/json:
+       type: ExistingContrevenant[]
+ /contraventions:
+  get:
+   description: Renvoie toutes les contraventions associés au contrevenant de l'id spécifié. 
+   queryParameters:
+    id:
+     description: L'id du propriétaire recherché.
+     type: number
+     required: true
+   responses:
+    200:
+     body:
+      application/json:
+      type: ExistingContravention[]		
+ /nombrecontraventions:
+  get:
+   description: Renvoie tout les contrevenants avec les nombres de contraventions pour chaque.
+   responses:
+    200:
+     body:
+      application/json:
+      type: NombreContraventions[]

@@ -18,7 +18,7 @@ function chercherContrevenant(){
           }
         }
       };
-      var url = "/rechercheDate?"+params;
+      var url = "/contrevenants?"+params;
       xhr.open("GET", url, true);
       xhr.send();
   }else{
@@ -71,7 +71,7 @@ function getContraventions(){
         }
       }
     };
-    var url = "/getContraventions?"+params;
+    var url = "/api/contraventions?"+params;
     xhr.open("GET", url, true);
     xhr.send();
   }

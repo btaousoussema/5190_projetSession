@@ -120,7 +120,9 @@ class Database:
         connection = self.get_connection()
         cursor = connection.cursor()
         query = cursor.execute("Select * from contrevenant where id = ?", (id,)).fetchone()
-        contrevenant = ContrevenantDb(query[0], query[1], query[2], query[3], query[4], query[5])
+        contrevenant = None
+        if len(query) > 0:
+            contrevenant = ContrevenantDb(query[0], query[1], query[2], query[3], query[4], query[5])
         return contrevenant
 
     def get_all_contrevenant(self):

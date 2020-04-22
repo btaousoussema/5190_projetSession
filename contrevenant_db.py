@@ -23,10 +23,10 @@ class ContrevenantDb(dict):
         print(self.id, self.proprietaire, self.categorie, self.etablissement, self.adresse, self.ville)
 
     def to_dict(self):
-        return  {"id": self.id, "proprietaire": self.proprietaire, "categorie":self.categorie,
-                 "etablissement": self.etablissement, "adresse": self.adresse, "ville": self.ville,
-                 "contraventions": json.dumps([ob.to_dict() for ob in self.contraventions]),
-                 "nombre_contraventions": len(self.contraventions)}
+        return {"id": self.id, "proprietaire": self.proprietaire, "categorie":self.categorie,
+                "etablissement": self.etablissement, "adresse": self.adresse, "ville": self.ville,
+                "contraventions": json.dumps([ob.to_dict() for ob in self.contraventions]),
+                "nombre_contraventions": len(self.contraventions)}
 
     def __eq__(self, other):
         return self.id == other.id
