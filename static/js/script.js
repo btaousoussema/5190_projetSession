@@ -18,7 +18,7 @@ function chercherContrevenant(){
           }
         }
       };
-      var url = "/contrevenants?"+params;
+      var url = "/api/contrevenants?"+params;
       xhr.open("GET", url, true);
       xhr.send();
   }else{

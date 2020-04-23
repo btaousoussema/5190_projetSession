@@ -64,7 +64,7 @@ def recherche_rue():
     return render_template('detail.html', contrevenants=contrevenants_db)
 
 
-@app.route('/contrevenants')
+@app.route('/api/contrevenants')
 def rechercher_selon_date():
     du = request.args.get('du')
     au = request.args.get('au')
@@ -74,7 +74,7 @@ def rechercher_selon_date():
             print(len(i.contraventions))
         data = json.dumps([ob.to_dict() for ob in contrevenants_db])
         print(data)
-        return data
+        return data, 200
     else:
         return json.dumps("Les dates ne respectent pas le format "
                           "YYYY-MM-DD."), 400
@@ -103,7 +103,6 @@ def get_contrevenant():
 
 @app.route('/inspection')
 def formulaire_inspection():
-    print("on est dans le GET.")
     return render_template('inspection.html')
 
 

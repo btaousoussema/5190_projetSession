@@ -1,8 +1,11 @@
-import urllib.request, urllib.parse, urllib.error
+import urllib.request
+import urllib.parse
+import urllib.error
 import xml.etree.ElementTree as ET
 
 import yaml
 
+import IdNotUniqueError
 from Contrevenant import Contrevenant
 from Database import Database
 import smtplib
@@ -20,15 +23,17 @@ def get_data():
     contrevenants = tree.findall('contrevenant')
     nouveau_contrevenants = []
     for contevenant in contrevenants:
-        contrev = Contrevenant(contevenant[0].text, contevenant[1].text, contevenant[2].text,  contevenant[3].text,
-                               contevenant[4].text, contevenant[5].text, contevenant[6].text, contevenant[7].text,
+        contrev = Contrevenant(contevenant[0].text, contevenant[1].text,
+                               contevenant[2].text,  contevenant[3].text,
+                               contevenant[4].text, contevenant[5].text,
+                               contevenant[6].text, contevenant[7].text,
                                contevenant[8].text)
         database = Database()
         database.get_connection()
         try:
             database.insert_contrevenant(contrev)
             nouveau_contrevenants.append(contrev.etablissement)
-        except:
+        except IdNotUniqueError:
             print("Ce contrevenant existe déjà.")
         database.insert_contravention(contrev)
     if len(nouveau_contrevenants) > 0:

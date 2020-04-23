@@ -1,6 +1,7 @@
 infraction_insert_schema = {
     'type': 'object',
-    'required': ['nom', 'adresse', 'ville', 'date_visite', 'nom_plaignant', 'description'],
+    'required': ['nom', 'adresse', 'ville', 'date_visite',
+                 'nom_plaignant', 'description'],
     'properties': {
         'nom': {
             'type': 'string'
