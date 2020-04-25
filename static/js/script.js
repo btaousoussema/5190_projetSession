@@ -2,7 +2,7 @@ function chercherContrevenant(){
     var du = document.getElementById("du").value;
     var au = document.getElementById("au").value;
     if (verifierDates(du, au)){
-      document.getElementById("erreurDate").hidden=true;
+      document.getElementById("erreurDate").style.visibility="hidden";
       var params = "du="+du+"&au="+au;
       var valeur = document.getElementById("valeur");
       var xhr = new XMLHttpRequest();
@@ -22,7 +22,7 @@ function chercherContrevenant(){
       xhr.open("GET", url, true);
       xhr.send();
   }else{
-    document.getElementById("erreurDate").hidden=false;
+    document.getElementById("erreurDate").style.visibility = "visible";
   }
 }
 

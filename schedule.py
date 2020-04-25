@@ -15,3 +15,4 @@ sched = BackgroundScheduler()
 sched.add_job(get_data, 'cron', hour=0, minute=0, second=0)
 
 sched.start()
+#time.sleep(9999)

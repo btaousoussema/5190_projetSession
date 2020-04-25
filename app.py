@@ -135,7 +135,7 @@ def delete_inspection(id):
     inspection = get_db().get_inspection(id)
     if inspection is None:
         print("None")
-        return "", 404
+        return "", 400
     else:
         get_db().delete_inspection(id)
         return "", 200
