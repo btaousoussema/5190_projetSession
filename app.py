@@ -1,4 +1,3 @@
-import os
 import re
 
 from flask import Flask
@@ -13,7 +12,6 @@ import json
 
 from Inspection import Inspection
 from schemas import infraction_insert_schema
-from schemas import infraction_delete_schema
 
 app = Flask(__name__, static_url_path="", static_folder="static")
 schema = JsonSchema(app)

@@ -33,7 +33,7 @@ def get_data():
         try:
             database.insert_contrevenant(contrev)
             nouveau_contrevenants.append(contrev.etablissement)
-        except IdNotUniqueError:
+        except Exception:
             print("Ce contrevenant existe déjà.")
         database.insert_contravention(contrev)
     if len(nouveau_contrevenants) > 0:
@@ -42,7 +42,7 @@ def get_data():
         nom_fichier = "ex.yaml"
         email = lire_fichier(nom_fichier)
         if email is not None:
-            envoyer_courriel(email,nouveau_contrevenants)
+            envoyer_courriel(email, nouveau_contrevenants)
 
 
 def lire_fichier(nom_fichier):
@@ -55,11 +55,13 @@ def lire_fichier(nom_fichier):
 
 
 def envoyer_courriel(email, contrevenants):
-    source_address = email #À changer, ce courriel devrait être le même pour tous les envois.
+    source_address = '5190ouss@gmail.com'
+    password = "cours5190"
     destination_address = email
-    body = "Voici les nouveaux contrevenants qui sont apparus dans la plus récente" \
+    body = "Voici les nouveaux contrevenants qui sont apparus dans " \
+           "la plus récente" \
            " collecte de données : "
-    if len(contrevenants)>0:
+    if len(contrevenants) > 0:
         body += contrevenants.pop(0)
     for name in contrevenants:
         body += ", " + name
@@ -74,10 +76,11 @@ def envoyer_courriel(email, contrevenants):
 
     msg.attach(MIMEText(body, 'plain'))
 
-    server = smtplib.SMTP('smtp-mail.outlook.com', 587)
+    server = smtplib.SMTP('smtp.gmail.com', 587)
     server.ehlo()
     server.starttls()
-    server.login(source_address, "noobownage1995")
+    print(source_address)
+    server.login(source_address, password)
     text = msg.as_string()
     server.sendmail(source_address, destination_address, text)
     server.quit()
