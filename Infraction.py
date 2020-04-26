@@ -1,4 +1,6 @@
 
+# Cette classe représente les infractions.
+
 
 class Infraction:
     def __init__(self, nom_etablissement, ville, date_visite, nom_plaignant,

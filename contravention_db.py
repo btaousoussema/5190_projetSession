@@ -1,5 +1,8 @@
 import _json
 
+# Cette classe représente les contraventions qui sont issues
+# de la base de donnée.
+
 
 class ContraventionDb(dict):
     def __init__(self, id, proprietaire, description, date_infraction,

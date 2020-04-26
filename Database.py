@@ -6,6 +6,8 @@ from Inspection import Inspection
 from contravention_db import ContraventionDb
 from contrevenant_db import ContrevenantDb
 
+# Cette classe représente toutes les interactions avec la base de donnée.
+
 
 class Database:
     def __init__(self):

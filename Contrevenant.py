@@ -1,5 +1,8 @@
 from datetime import datetime
 
+# Cette classe représente les contrevenants issues du site
+# de la ville de montréal.
+
 
 class Contrevenant:
     def __init__(self, proprietaire, categorie, etablissement, adresse,
@@ -22,11 +25,15 @@ class Contrevenant:
               self.adresse, self.adresse, self.ville, self.description,
               self.date_infraction, self.date_jugement, self.montant)
 
+    # Transforme la date recue en paramètre en la forme 'YYYY-MM-DD'
+
     def transform_date(self, date):
         date_parsed = str(date).split(" ")
         mois = self.traduire_mois(date_parsed[1])
         return datetime.strptime(date_parsed[0] + mois + date_parsed[2],
                                  '%d%B%Y').strftime('%Y-%m-%d')
+
+    # Transforme le mois au chiffre correspondant.
 
     def traduire_mois(self, mois):
         if mois == "janvier":

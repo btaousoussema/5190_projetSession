@@ -1,5 +1,7 @@
 from datetime import datetime
 
+#   Cette classe représente les inspections.
+
 
 class Inspection:
     def __init__(self, nom, adresse, ville, date_visite, nom_plaignant,

@@ -1,5 +1,7 @@
 import json
 
+# Cette classe représente les contrevenants, issues de la base de données.
+
 
 class ContrevenantDb(dict):
     def __init__(self, id, proprietaire, categorie, etablissement, adresse,
